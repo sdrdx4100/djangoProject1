@@ -1,0 +1,29 @@
+{% extends "memo/base.html" %}
+{% load memo_extras %}
+{% block title %}{{ memo.title }}{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">{{ memo.title }}</h3>
+    </div>
+    <div class="card-body">
+        <div class="markdown-body">
+            {{ memo.content|markdown|safe }}
+        </div>
+        <p>
+            {% if memo.tag %}
+                <span class="badge badge-info">{{ memo.tag.name }}</span>
+            {% else %}
+                <span class="text-muted">タグなし</span>
+            {% endif %}
+        </p>
+        <p class="text-muted">作成日時: {{ memo.created_at|date:"Y-m-d H:i" }}<br>更新日時: {{ memo.updated_at|date:"Y-m-d H:i" }}</p>
+        <a href="{% url 'memo_edit' memo.pk %}" class="btn btn-warning">編集</a>
+        <form method="post" action="{% url 'memo_delete' memo.pk %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">削除</button>
+        </form>
+        <a href="{% url 'memo_list' %}" class="btn btn-secondary">戻る</a>
+    </div>
+</div>
+{% endblock %}

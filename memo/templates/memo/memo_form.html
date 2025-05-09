@@ -1,0 +1,52 @@
+{% extends "memo/base.html" %}
+{% block title %}メモ{{ memo.id|default:"作成" }}{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">メモ{{ memo.id|default:"作成" }}</h3>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">タイトル</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ memo.title|default:'' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="content">内容</label>
+                <textarea id="content" name="content" class="form-control" rows="8" required>{{ memo.content|default:'' }}</textarea>
+                <small class="form-text text-muted">※Markdown記法が使えます</small>
+            </div>
+            <div class="form-group">
+                <label>タグ</label>
+                <select id="tag_select" name="tag" class="form-control mb-2">
+                    <option value="">（タグなし）</option>
+                    {% for tag in tags %}
+                        <option value="{{ tag.id }}"
+                        {% if memo.tag and tag.id == memo.tag.id %}selected{% endif %}
+                        >{{ tag.name }}</option>
+                    {% endfor %}
+                    <option value="__new__" {% if new_tag %}selected{% endif %}>新しいタグを作成</option>
+                </select>
+                <input type="text" id="new_tag_input" name="new_tag" class="form-control mt-2"
+                       placeholder="新しいタグ名を入力" style="display: none;" value="{{ new_tag|default:'' }}">
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">保存</button>
+            <a href="{% url 'memo_list' %}" class="btn btn-secondary mt-2">戻る</a>
+        </form>
+    </div>
+</div>
+<script>
+    $(function() {
+        function toggleNewTagInput() {
+            if ($('#tag_select').val() === '__new__') {
+                $('#new_tag_input').show();
+            } else {
+                $('#new_tag_input').hide();
+            }
+        }
+        $('#tag_select').change(toggleNewTagInput);
+        toggleNewTagInput();
+    });
+</script>
+{% endblock %}
