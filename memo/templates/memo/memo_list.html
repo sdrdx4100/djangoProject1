@@ -1,0 +1,46 @@
+{% extends "memo/base.html" %}
+{% load memo_extras %}
+{% block title %}メモ一覧{% endblock %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">
+            {% if selected_tag_id == "None" %}
+                タグなしのメモ
+            {% elif selected_tag_id %}
+                「{{ sidebar_tags|get_tag_name:selected_tag_id }}」のメモ
+            {% else %}
+                すべてのメモ
+            {% endif %}
+        </h3>
+        <div class="card-tools">
+            <a href="{% url 'memo_create' %}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> 新規作成</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {% for memo in memos %}
+            <div class="col-md-6">
+                <div class="info-box mb-3 bg-light">
+                    <span class="info-box-icon bg-info"><i class="far fa-sticky-note"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">{{ memo.title }}</span>
+                        <span class="info-box-number">
+                            {% if memo.tag %}
+                                <span class="badge badge-info">{{ memo.tag.name }}</span>
+                            {% else %}
+                                <span class="text-muted">タグなし</span>
+                            {% endif %}
+                        </span>
+                        <span class="info-box-number">{{ memo.created_at|date:"Y-m-d H:i" }}</span>
+                        <a href="{% url 'memo_detail' memo.pk %}" class="btn btn-outline-primary btn-sm mt-2">詳細</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>メモがありません。</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
