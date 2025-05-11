@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.name }} - ガントチャート{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ project.name }} - ガントチャート</h3>
+                <div class="card-tools">
+                    <a href="{% url 'project_detail' project.id %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> プロジェクト詳細に戻る
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="gantt"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.css">
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tasks = [
+        {% for task in tasks %}
+        {
+            id: '{{ task.id }}',
+            name: '{{ task.title }}',
+            start: '{{ task.start_date|date:"Y-m-d" }}',
+            end: '{{ task.end_date|date:"Y-m-d" }}',
+            progress: {% if task.status == 'completed' %}100{% elif task.status == 'in_progress' %}50{% else %}0{% endif %},
+            dependencies: '{{ task.milestone.id|default:"" }}',
+            custom_class: '{{ task.priority }}'
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    const gantt = new Gantt("#gantt", tasks, {
+        header_height: 50,
+        column_width: 30,
+        step: 24,
+        view_mode: 'Week',
+        bar_height: 20,
+        bar_corner_radius: 3,
+        arrow_curve: 5,
+        padding: 18,
+        view_modes: ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month'],
+        custom_popup_html: function(task) {
+            return `
+                <div class="gantt-popup">
+                    <h4>${task.name}</h4>
+                    <p>開始日: ${task.start}</p>
+                    <p>終了日: ${task.end}</p>
+                    <p>進捗: ${task.progress}%</p>
+                </div>
+            `;
+        }
+    });
+
+    // 優先度に応じた色分け
+    const style = document.createElement('style');
+    style.textContent = `
+        .high { fill: #dc3545; }
+        .medium { fill: #ffc107; }
+        .low { fill: #28a745; }
+        .gantt-popup {
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .gantt-popup h4 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .gantt-popup p {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script>
+{% endblock %} 

@@ -16,9 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+
+def root_redirect(request):
+    if request.user.is_authenticated:
+        return redirect('memo_list')
+    else:
+        return redirect('login')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('memo/', include('memo.urls')),
-    path('', include('memo.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('', root_redirect),  # ここで分岐
 ]

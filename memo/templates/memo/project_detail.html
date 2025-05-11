@@ -1,0 +1,48 @@
+{% extends "memo/base.html" %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>プロジェクト詳細</h2>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h4>{{ project.name }}</h4>
+            <p>{{ project.description|linebreaksbr }}</p>
+            <p>開始日: {{ project.start_date }} / 終了日: {{ project.end_date }}</p>
+        </div>
+    </div>
+    <h5>タスク一覧</h5>
+    <a href="{% url 'task_create' project.id %}" class="btn btn-success mb-2">タスク追加</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>タスク名</th>
+                <th>担当</th>
+                <th>状態</th>
+                <th>優先度</th>
+                <th>開始日</th>
+                <th>終了日</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td><a href="{% url 'task_detail' project.id task.id %}">{{ task.title }}</a></td>
+                <td>{% if task.assigned_to %}{{ task.assigned_to.username }}{% endif %}</td>
+                <td>{{ task.get_status_display }}</td>
+                <td>{{ task.get_priority_display }}</td>
+                <td>{{ task.start_date }}</td>
+                <td>{{ task.end_date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">タスクがありません。</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'gantt_chart' project.id %}" class="btn btn-info mt-2">ガントチャートを見る</a>
+    <a href="{% url 'project_list' %}" class="btn btn-secondary mt-2">プロジェクト一覧に戻る</a>
+</div>
+{% endblock %} 
