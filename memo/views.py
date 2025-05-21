@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Memo, Tag
+from .utils import get_cached_constants
 
 def memo_list(request):
     tag_id = request.GET.get('tag')
@@ -79,3 +80,19 @@ def memo_delete(request, pk):
         memo.delete()
         return redirect('memo_list')
     return render(request, 'memo/memo_confirm_delete.html', {'memo': memo})
+
+
+def some_view(request):
+    # 特定カテゴリの定数を取得
+    type1_constants = get_cached_constants('type1')
+
+    # 取得した定数の処理
+    for constant in type1_constants:
+        print(f"{constant.phrase}: {constant.remark}")
+
+    context = {
+        'constants': type1_constants,
+        # その他のコンテキスト変数
+    }
+
+    return render(request, 'memo/template.html', context)
