@@ -86,9 +86,9 @@ def some_view(request):
     # 特定カテゴリの定数を取得
     type1_constants = get_cached_constants('type1')
 
-    # 取得した定数の処理
-    for constant in type1_constants:
-        print(f"{constant.phrase}: {constant.remark}")
+    # # 取得した定数の処理
+    # for constant in type1_constants:
+    #     print(f"{constant.phrase}: {constant.remark}")
 
     context = {
         'constants': type1_constants,

@@ -28,8 +28,6 @@ def greeting_context(request):
         category_key = 'greeting_1'  # 朝〜午前の挨拶
     elif time(12, 0) <= now <= time(17, 0):
         category_key = 'greeting_2'  # 昼〜夕方の挨拶
-        
-    print(f"Current time: {now}, Greeting key: {category_key}")
 
     greeting = None  # 挨拶文の初期化
     if category_key:
@@ -41,8 +39,6 @@ def greeting_context(request):
     # デフォルトの挨拶を設定
     if not greeting:
         greeting = "Hello"
-    
-    print(f"Greeting: {greeting}")
 
     # テンプレートで利用するための辞書を返す
     return {'navbar_greeting': greeting}
@@ -58,6 +54,4 @@ def system_message_context(request):
         'system_messages'キーに[{name_key, name}, ...]のリストを格納
     """
     messages = list(Constant.objects.filter(category_key='system_message').values('name_key', 'name'))
-    # DEBUG用のログ出力
-    print(f"System messages: {messages}")
     return {'system_messages': messages}
