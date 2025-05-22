@@ -3,7 +3,9 @@ from django.db import models
 class Constant(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField('定数文言', max_length=255)
+    name_key = models.CharField('定数キー', null=True, max_length=255)
     category = models.CharField('定数分類', max_length=100)
+    category_key = models.CharField('定数分類キー', null=True, max_length=255)
     note = models.TextField('備考', blank=True, null=True)
     created_at = models.DateTimeField('作成日時', auto_now_add=True)
 
