@@ -53,7 +53,6 @@
     </nav>
     <!-- /.navbar -->
     {% load information_tags %}
-    {% latest_information %}
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <a href="{% url 'memo_list' %}" class="brand-link">
@@ -97,6 +96,7 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper" style="min-height: 100vh;">
+        {% latest_information %}
         <section class="content pt-3">
             <div class="container-fluid">
                 {% block content %}{% endblock %}

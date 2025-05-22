@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'constant_master.apps.ConstantMasterConfig',
     'information',
     'markdownx',
+    'markdownify',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,18 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MARKDOWNIFY = {
+    "default": {
+        "WHITELIST_TAGS": [
+            'a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p', 'img', 'hr', 'br', 'span', 'table', 'thead', 'tbody', 'tr', 'th', 'td'
+        ],
+        "WHITELIST_ATTRS": [
+            'href', 'src', 'alt', 'class', 'style', 'title', 'align', 'width', 'height', 'target', 'rel'
+        ],
+        "MARKDOWN_EXTENSIONS": [
+            'markdown.extensions.extra',
+            'markdown.extensions.sane_lists',
+        ],
+    }
+}
