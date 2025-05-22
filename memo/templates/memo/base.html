@@ -45,6 +45,11 @@
                 <a href="{% url 'memo_create' %}" class="nav-link">新規作成</a>
             </li>
         </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <span class="nav-link">{{ navbar_greeting }}</span>
+            </li>
+        </ul>
     </nav>
     <!-- /.navbar -->
 
@@ -99,5 +104,6 @@
     </div>
     <!-- /.content-wrapper -->
 </div>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

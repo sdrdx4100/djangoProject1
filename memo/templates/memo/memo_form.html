@@ -31,7 +31,7 @@
                 <input type="text" id="new_tag_input" name="new_tag" class="form-control mt-2"
                        placeholder="新しいタグ名を入力" style="display: none;" value="{{ new_tag|default:'' }}">
             </div>
-            <button type="submit" class="btn btn-primary mt-2">保存</button>
+            <button type="submit" class="btn btn-primary mt-2" onclick="showCreateMessage()">保存</button>
             <a href="{% url 'memo_list' %}" class="btn btn-secondary mt-2">戻る</a>
         </form>
     </div>
@@ -48,5 +48,20 @@
         $('#tag_select').change(toggleNewTagInput);
         toggleNewTagInput();
     });
+</script>
+{% endblock %}
+{% block extra_js %}
+<script>
+  // Django contextからsystem_messagesを取得
+  const systemMessages = {{ system_messages|safe }};
+  function showCreateMessage() {
+    // name_key='create'のメッセージを探す
+    const msg = systemMessages.find(m => m.name_key === 'create');
+    console.log('systemMessages:', systemMessages); // ← ここで配列の中身を確認
+    console.log('msg:', msg); // ← ここで該当メッセージを確認
+    if (msg) {
+      alert(msg.name); 
+    }
+  }
 </script>
 {% endblock %}
