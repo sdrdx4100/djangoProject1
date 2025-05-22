@@ -1,0 +1,7 @@
+{% if information %}
+<div class="information-banner">
+  <strong>{{ information.title }}</strong><br>
+  <div class="markdown-body">{{ information.content|linebreaksbr }}</div>
+  <p class="info-date">{{ information.created_at }}</p>
+</div>
+{% endif %}
